@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Server Interview Application</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header><div class="bar">
+  <div class="logo"><span class="cube"></span>Server Interview Desk</div>
+  <nav>
+    <button class="ghost sm" onclick="go('apply')">Apply</button>
+    <button class="ghost sm" id="adminBtn" onclick="go('admin')">Admin</button>
+    <button class="bad sm hide" id="logoutBtn" onclick="logout()">Log out</button>
+  </nav>
+</div></header>
+
+<main>
+<!-- APPLY -->
+<section id="v-apply">
+  <div class="card">
+    <h1>Apply for an interview token</h1>
+    <p class="hint">Answer honestly. When you finish, you get a token to give the staff team.</p>
+    <form id="form" novalidate onsubmit="return submitApp(event)">
+      <div class="row">
+        <div><label for="name">Your name</label><input id="name" maxlength="40" autocomplete="name"></div>
+        <div><label for="mc">In-game Minecraft name</label><input id="mc" maxlength="16" placeholder="e.g. Steve_123" autocomplete="off"></div>
+      </div>
+      <div class="row">
+        <div><label for="age">Age</label><input id="age" type="number" min="5" max="99" inputmode="numeric"></div>
+        <div><label for="role">Role you want in Minecraft</label>
+          <select id="role"><option value="">Choose a role…</option><option>Builder</option><option>Redstoner</option><option>Explorer</option><option>Fighter / PvP</option><option>Farmer / Resource gatherer</option><option>Trader / Economy</option><option>Staff / Moderator</option><option>Other</option></select></div>
+      </div>
+      <label>Have you played on a server before?</label>
+      <div class="choice" id="expChoice">
+        <label><input type="radio" name="exp" value="Yes"> Yes</label>
+        <label><input type="radio" name="exp" value="No"> No</label>
+      </div>
+      <div id="expBox" class="hide"><label for="expText">Tell us about it <small>(server names, how long, any role)</small></label><textarea id="expText" maxlength="500"></textarea></div>
+      <label>Will you follow the server rules?</label>
+      <div class="choice">
+        <label><input type="radio" name="rules" value="Yes"> Yes, I will</label>
+        <label><input type="radio" name="rules" value="No"> No</label>
+      </div>
+      <label>Will you be friendly to other members?</label>
+      <div class="choice">
+        <label><input type="radio" name="friendly" value="Yes"> Yes, I will</label>
+        <label><input type="radio" name="friendly" value="No"> No</label>
+      </div>
+      <div class="err" id="err" role="alert"></div>
+      <button type="submit">Get my interview token</button>
+    </form>
+  </div>
+</section>
+
+<!-- DONE -->
+<section id="v-done" class="hide">
+  <div class="card">
+    <h1>Application sent</h1>
+    <p>Your interview token:</p>
+    <div class="token" id="tokenOut"></div>
+    <p>Send this token <b>and the application code below</b> to the server owner (for example on Discord). They need the code to see your answers.</p>
+    <textarea class="code" id="codeOut" readonly onclick="this.select()"></textarea>
+    <div class="acts" style="margin-top:10px">
+      <button onclick="copy('codeOut',this)">Copy application code</button>
+      <button class="ghost" onclick="go('apply')">New application</button>
+    </div>
+  </div>
+</section>
+
+<!-- LOGIN -->
+<section id="v-login" class="hide">
+  <div class="card" style="max-width:440px;margin:auto">
+    <h1 id="loginTitle">Admin login</h1>
+    <form onsubmit="return doLogin(event)">
+      <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
+      <div id="pw2Box" class="hide"><label for="pw2">Repeat password</label><input id="pw2" type="password" autocomplete="new-password"></div>
+      <div class="err" id="loginErr" role="alert"></div>
+      <button type="submit" id="loginBtn">Log in</button>
+    </form>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section id="v-admin" class="hide">
+  <h1>Applications</h1>
+  <div class="stats" id="stats"></div>
+  <div class="card">
+    <h3>Import applications</h3>
+    <p class="hint">Paste one or more application codes players sent you (one per line).</p>
+    <textarea id="importBox" class="code" placeholder="Paste codes here"></textarea>
+    <div class="acts" style="margin-top:10px"><button onclick="importCodes()">Import</button><span id="importMsg" class="hint" style="align-self:center"></span></div>
+  </div>
+  <div class="tools">
+    <input id="q" placeholder="Search name, Minecraft name or token" oninput="renderAdmin()">
+    <select id="filter" onchange="renderAdmin()"><option value="">All statuses</option><option>pending</option><option>accepted</option><option>rejected</option></select>
+    <button class="ghost sm" onclick="exportJSON()">Export backup</button>
+    <button class="ghost sm" onclick="resetPw()">Change password</button>
+  </div>
+  <div id="list"></div>
+</section>
+</main>
+<footer>Interview applications for our Minecraft server</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
